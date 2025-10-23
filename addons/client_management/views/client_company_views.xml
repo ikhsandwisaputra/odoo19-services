@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_client_company_tree" model="ir.ui.view">
+            <field name="name">client.company.tree</field>
+            <field name="model">client.company</field>
+            <field name="arch" type="xml">
+                <list string="Perusahaan Klien">
+                    <field name="name"/>
+                    <field name="contact_person_id"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_client_company_form" model="ir.ui.view">
+            <field name="name">client.company.form</field>
+            <field name="model">client.company</field>
+            <field name="arch" type="xml">
+                <form string="Perusahaan Klien">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="contact_person_id"/>
+                            </group>
+                            <group>
+                                <field name="phone"/>
+                                <field name="email"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_client_company" model="ir.actions.act_window">
+    <field name="name">Perusahaan Klien</field>
+    <field name="res_model">client.company</field>
+    <field name="view_mode">list,form</field>
+    <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+            Belum ada data perusahaan klien.
+            <br/>
+            Klik 'Create' untuk menambah data baru.
+        </p>
+    </field>
+</record>
+
+
+        <menuitem 
+            id="menu_client_root"
+            name="Manajemen Klien"
+            sequence="10"/>
+
+        <menuitem
+            id="menu_client_company"
+            name="Data Perusahaan"
+            parent="menu_client_root"
+            action="action_client_company"
+            sequence="1"/>
+
+    </data>
+</odoo>

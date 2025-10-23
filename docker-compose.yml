@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  web:
+    image: odoo:19.0       
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ./config/odoo.conf:/etc/odoo/odoo.conf
+      - ./addons:/mnt/extra-addons
+    restart: always
+    networks:
+      - odoo-net
+
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_DB=odoo
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo123
+    ports: 
+      - "5432:5432"
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - odoo-net
+
+volumes:
+  odoo-web-data:
+  odoo-db-data:
+
+networks:
+  odoo-net:
+    driver: bridge
