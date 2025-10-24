@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_premium_root"
+              name="Premium Feature"
+              sequence="100"/>
+    
+    <menuitem id="menu_premium_feature"
+              name="Premium Feature"
+              parent="menu_premium_root"
+              action="action_premium_feature"
+              sequence="1"/>
+</odoo>

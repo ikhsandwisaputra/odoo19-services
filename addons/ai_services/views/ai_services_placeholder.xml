@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Minimal placeholder view to satisfy manifest data entry. No models provided. -->
+    <data noupdate="1">
+        <record id="view_ai_services_placeholder_action" model="ir.actions.act_window">
+            <field name="name">AI Services (Placeholder)</field>
+            <field name="res_model">ir.ui.menu</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

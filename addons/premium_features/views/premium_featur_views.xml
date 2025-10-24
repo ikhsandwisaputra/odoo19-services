@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View with Premium Banner -->
+    <record id="view_premium_feature_form" model="ir.ui.view">
+        <field name="name">premium.feature.form</field>
+        <field name="model">premium.feature</field>
+        <field name="arch" type="xml">
+            <form string="Premium Feature">
+                <sheet>
+                    <div class="premium_feature_banner">
+                        <div class="premium_icon">
+                            <i class="fa fa-lock fa-3x"/>
+                        </div>
+                        <div class="premium_content">
+                            <h2>This is a Premium Feature</h2>
+                            <p>Upgrade your plan to unlock this powerful feature and boost your productivity.</p>
+                            <div class="premium_buttons">
+                                <button name="action_learn_more" 
+                                        string="Learn More" 
+                                        type="object" 
+                                        class="btn-primary"/>
+                                <button name="action_upgrade" 
+                                        string="Upgrade Now" 
+                                        type="object" 
+                                        class="btn-success oe_highlight"/>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_premium_feature_tree" model="ir.ui.view">
+        <field name="name">premium.feature.tree</field>
+        <field name="model">premium.feature</field>
+        <field name="arch" type="xml">
+            <tree string="Premium Features">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_premium_feature" model="ir.actions.act_window">
+        <field name="name">Premium Feature</field>
+        <field name="res_model">premium.feature</field>
+        <field name="view_mode">form,tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                This feature requires a premium subscription
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,65 @@
+.premium_feature_banner {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    color: white;
+    margin: 20px;
+}
+
+.premium_icon {
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.premium_content h2 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.premium_content p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.premium_buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+}
+
+.premium_buttons button {
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.premium_buttons .btn-primary {
+    background-color: white;
+    color: #667eea;
+}
+
+.premium_buttons .btn-primary:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+.premium_buttons .btn-success {
+    background-color: #48bb78;
+    color: white;
+}
+
+.premium_buttons .btn-success:hover {
+    background-color: #38a169;
+    transform: translateY(-2px);
+}

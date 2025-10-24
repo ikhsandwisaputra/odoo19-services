@@ -1,0 +1,79 @@
+openapi: 3.0.3
+info:
+  title: Odoo Contact API
+  version: 1.0.0
+  description: API untuk mengelola data kontak (res.partner) di Odoo.
+
+servers:
+  - url: http://localhost:8069
+
+paths:
+  /api/contacts:
+    get:
+      summary: Ambil semua kontak
+      responses:
+        '200':
+          description: Berhasil mengambil data
+    post:
+      summary: Tambah kontak baru
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John Doe
+                email:
+                  type: string
+                  example: john@example.com
+      responses:
+        '201':
+          description: Kontak berhasil dibuat
+
+  /api/contacts/{partner_id}:
+    get:
+      summary: Ambil data kontak berdasarkan ID
+      parameters:
+        - name: partner_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Data kontak berhasil diambil
+    put:
+      summary: Perbarui kontak berdasarkan ID
+      parameters:
+        - name: partner_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  example: +62812345678
+      responses:
+        '200':
+          description: Kontak berhasil diperbarui
+    delete:
+      summary: Hapus kontak berdasarkan ID
+      parameters:
+        - name: partner_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Kontak berhasil dihapus
