@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 
+      LANGKAH 1: Buat template untuk snippet itu sendiri.
+      (Bagian ini sudah benar dari sebelumnya)
+    -->
+    <template id="snippet_product_table" name="Tabel Produk Dinamis">
+        <section class="s_dynamic_table container pt32 pb32 oe_structure_not_removable"
+                 data-snippet="s_dynamic_table" 
+                 data-name="Tabel Produk Dinamis">
+            
+            <h3 class="mt-4 mb-3">Daftar Produk</h3>
+            
+            <!-- Data diambil langsung oleh QWeb saat snippet di-render -->
+            <t t-set="products" t-value="request.env['product.template'].search([], limit=10)"/>
+            
+            <t t-if="products">
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th style="width: 100px;">Gambar</th>
+                            <th>Nama Produk</th>
+                            <th style="width: 150px;">Tipe Produk</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="products" t-as="product">
+                            <tr>
+                                <td>
+                                    <span t-field="product.image_128"
+                                          t-options='{"widget": "image", "class": "img img-fluid"}'
+                                          style="max-width: 75px;"/>
+                                </td>
+                                <td><t t-esc="product.name"/></td>
+                                <td><t t-esc="product.type"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </t>
+            <t t-if="not products">
+                <div class="alert alert-info" role="alert">
+                    Belum ada produk di database.
+                </div>
+            </t>
+        </section>
+    </template>
+
+    <!-- 
+      LANGKAH 2: Daftarkan snippet kita ke 'Snippet Bar'
+      (PERBAIKAN ERROR "Missing Record")
+    -->
+    <template id="place_snippet_in_bar" inherit_id="website.snippets" name="Tambahkan Snippet Tabel Produk">
+        
+        <!-- 1. Buat Kategori/Grup baru -->
+        <!-- Kita targetkan tag <snippets> dengan id 'snippet_groups' -->
+        <xpath expr="//snippets[@id='snippet_groups']/*[1]" position="before">
+            <!-- 
+              !! INI PERBAIKANNYA !!
+              Kita *tidak* lagi menggunakan t-snippet="...banner" yang error itu.
+              Kita hanya mendefinisikan grupnya.
+            -->
+            <t snippet-group="custom_page_module_group"
+               string="Snippets Kustom"
+               t-thumbnail="/website/static/src/img/snippets_thumbs/s_banner.svg"/>
+        </xpath>
+
+        <!-- 2. Tambahkan snippet kita ke dalam struktur -->
+        <!-- Kita targetkan tag <snippets> dengan id 'snippet_structure' -->
+        <xpath expr="//snippets[@id='snippet_structure']/*[1]" position="before">
+            <!-- 
+              Di sini kita menempatkan snippet kita (snippet_product_table)
+              ke dalam grup yang baru saja kita buat (custom_page_module_group)
+            -->
+            <t t-snippet="custom_page_module.snippet_product_table"
+               group="custom_page_module_group"/>
+        </xpath>
+        
+    </template>
+</odoo>
+

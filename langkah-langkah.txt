@@ -1,0 +1,290 @@
+Tentu, ini adalah panduan lengkap langkah demi langkah untuk membuat snippet kustom baru di Odoo 18, menggunakan contoh "Hero Banner" sederhana.
+
+Proses ini melibatkan pembuatan modul kustom, pendefinisian HTML snippet, pendaftarannya ke editor Website Builder, dan penambahan styling (SCSS) serta (opsional) JavaScript.
+
+Langkah 1: Buat Struktur Modul Kustom
+Pertama, Anda perlu membuat modul Odoo baru. Mari kita sebut modul ini theme_my_snippets.
+
+Struktur file Anda akan terlihat seperti ini:
+buatkan dalam folder addons
+theme_my_snippets/
+├── __init__.py
+├── __manifest__.py
+├── static/
+│   └── src/
+│       ├── scss/
+│       │   └── hero_snippet.scss
+│       └── js/
+│           └── snippet_options.js  (Opsional)
+└── views/
+    ├── assets.xml
+    ├── snippets.xml
+    └── snippets/
+        └── hero_snippet.xml
+File: __manifest__.py
+Ini adalah file terpenting untuk mendaftarkan modul Anda dan dependensinya.
+
+Python
+
+# -*- coding: utf-8 -*-
+{
+    'name': 'My Website Snippets (Odoo 18)',
+    'version': '18.0.1.0',
+    'summary': 'Adds custom website builder snippets.',
+    'author': 'Your Name',
+    'website': 'https.yourwebsite.com',
+    'category': 'Website/Theme',
+    'depends': [
+        'website',  # Dependensi wajib untuk snippet
+    ],
+    'data': [
+        # Daftarkan file XML keamanan (jika ada)
+        # ...
+        # Daftarkan file XML snippet
+        'views/snippets/hero_snippet.xml',
+        'views/snippets.xml',
+        
+        # File assets.xml HARUS didaftarkan di 'assets'
+        # 'views/assets.xml', # JANGAN daftarkan di 'data'
+    ],
+    'assets': {
+        # Aset untuk frontend (tampilan live website)
+        'website.assets_frontend': [
+            'theme_my_snippets/static/src/scss/hero_snippet.scss',
+        ],
+        # Aset untuk backend/editor (tampilan saat mengedit)
+        'website.assets_editor': [
+            # Kita juga muat SCSS di editor agar terlihat sama
+            'theme_my_snippets/static/src/scss/hero_snippet.scss', 
+            # (Opsional) Daftarkan JS untuk opsi kustom
+            # 'theme_my_snippets/static/src/js/snippet_options.js',
+        ],
+    },
+    'installable': True,
+    'application': False,
+    'license': 'LGPL-3',
+}
+Langkah 2: Definisikan HTML Snippet
+Buat file yang berisi struktur HTML murni dari snippet Anda.
+
+File: views/snippets/hero_snippet.xml
+Ini adalah template yang akan disisipkan ke halaman saat pengguna menyeret snippet Anda.
+
+XML
+
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="s_hero_banner" name="Hero Banner">
+        <section class="s_hero_banner_wrapper oe_custom_snippet">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2 text-center">
+                        <h1>Your Catchy Headline Here</h1>
+                        <p class="lead">
+                            This is a simple hero unit, a simple jumbotron-style 
+                            component for calling extra attention to featured content.
+                        </p>
+                        <a href="/contactus" class="btn btn-primary btn-lg">
+                            Call to Action
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>
+Langkah 3: Daftarkan Snippet ke Editor
+Sekarang, kita perlu memberi tahu Odoo Website Builder bahwa template di atas adalah snippet yang dapat ditarik (drag-and-drop).
+
+File: views/snippets.xml
+File ini "menyuntikkan" snippet kita ke dalam daftar pilihan snippet di editor.
+
+XML
+
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="my_custom_snippets" inherit_id="website.snippets" name="My Custom Snippets">
+        <xpath expr="//div[@id='snippet_structure']//div[hasclass('o_panel_body')]" position="inside">
+            
+            <t t-snippet="theme_my_snippets.s_hero_banner"
+               t-thumbnail="/theme_my_snippets/static/src/img/snippet_icon.png"
+               data-tooltip="My Hero Banner"/>
+
+            </xpath>
+    </template>
+</odoo>
+Penting: expr="..." dalam xpath menentukan di kategori mana snippet Anda akan muncul. snippet_structure adalah untuk snippet "Struktur" (seperti Banner, Teks-Gambar, dll.). Anda bisa memilih kategori lain seperti snippet_feature, snippet_effect, dll.
+
+Langkah 4: Tambahkan Styling (SCSS)
+Snippet Anda mungkin memerlukan styling kustom agar terlihat bagus.
+
+File: static/src/scss/hero_snippet.scss
+SCSS
+
+/* Gunakan nama class yang unik dari HTML snippet Anda (Langkah 2)
+  agar tidak bentrok dengan style Odoo lainnya.
+*/
+
+.s_hero_banner_wrapper {
+    padding: 80px 0;
+    background-color: #f8f9fa; // Latar belakang abu-abu muda
+    border-bottom: 1px solid #e9ecef;
+
+    h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .lead {
+        font-size: 1.25rem;
+        color: #555;
+        margin-bottom: 30px;
+    }
+
+    .btn-primary {
+        // Anda bisa override style bootstrap jika perlu
+        background-color: #007bff;
+        border-color: #007bff;
+        padding: 12px 30px;
+        font-size: 1.1rem;
+    }
+}
+Langkah 5: Daftarkan Aset (Sudah dilakukan di Manifest)
+Langkah ini penting agar file .scss Anda dimuat oleh Odoo. Di Odoo 18, cara terbaik untuk melakukannya adalah melalui kunci assets di __manifest__.py (seperti yang sudah kita lakukan di Langkah 1).
+
+File views/assets.xml (cara lama) masih bisa digunakan, tetapi metode __manifest__.py lebih disukai.
+
+Python
+
+# Di dalam __manifest__.py
+    'assets': {
+        # SCSS ini akan dimuat di website live
+        'website.assets_frontend': [
+            'theme_my_snippets/static/src/scss/hero_snippet.scss',
+        ],
+        # SCSS ini akan dimuat di dalam editor (agar tampilannya WYSIWYG)
+        'website.assets_editor': [
+            'theme_my_snippets/static/src/scss/hero_snippet.scss', 
+        ],
+    },
+Langkah 6: Install atau Upgrade Modul
+Mulai server Odoo Anda.
+
+Masuk sebagai Admin.
+
+Aktifkan Mode Developer (Settings -> Developer Tools -> Activate developer mode).
+
+Buka menu Apps.
+
+Klik Update Apps List.
+
+Cari modul Anda (theme_my_snippets).
+
+Klik Install (atau Upgrade jika sudah terinstal).
+
+Langkah 7: Verifikasi Hasil
+Buka Website Anda.
+
+Klik Edit di pojok kanan atas untuk masuk ke Website Builder.
+
+Di panel snippet (sebelah kanan), cari tab Structure.
+
+Anda sekarang akan melihat snippet "My Hero Banner" (dengan thumbnail yang Anda tentukan atau yang dibuat otomatis).
+
+Seret (drag) snippet tersebut ke halaman Anda.
+
+Snippet akan muncul dengan styling kustom yang Anda definisikan di SCSS.
+
+(Opsional) Langkah 8: Menambahkan Opsi Kustom (JS)
+Jika Anda ingin pengguna dapat mengubah hal-hal seperti warna latar belakang atau gambar melalui panel "Options", Anda perlu menambahkan JavaScript. Odoo 18 menggunakan Owl 2 untuk ini.
+
+File: static/src/js/snippet_options.js
+JavaScript
+
+/** @odoo-module */
+
+import { registry } from "@web/core/registry";
+import { 
+    WebsiteOptions 
+} from '@website/components/website_options/website_options';
+import { _t } from "@web/core/l10n/translation";
+
+// 1. Definisikan Logika Opsi Anda
+export class HeroSnippetOptions extends WebsiteOptions {
+    /**
+     * @override
+     */
+    async selectClass(preview, widget, $opt) {
+        // Ini adalah fungsi kustom untuk mengubah class pada snippet
+        // $opt adalah elemen (opsi) yang diklik pengguna
+        
+        // Hapus class warna sebelumnya
+        const $target = this.options.wysiwyg.getEditableArea()
+                                .find('.s_hero_banner_wrapper');
+        $target.removeClass('bg-primary bg-secondary bg-light bg-dark');
+
+        // Tambahkan class baru dari opsi yang dipilih
+        const newClass = $opt.data('select-class');
+        if (newClass) {
+            $target.addClass(newClass);
+        }
+    }
+}
+
+// 2. Tambahkan atribut ke template HTML (views/snippets/hero_snippet.xml)
+//    Kita perlu menambahkan 'data-js' agar JS tahu ini targetnya
+/*
+    <template id="s_hero_banner" name="Hero Banner">
+        <section class="s_hero_banner_wrapper oe_custom_snippet" 
+                 data-js="HeroSnippetOptions"> ...
+        </section>
+    </template>
+*/
+
+// 3. Tambahkan template untuk opsi di XML (views/snippets.xml)
+/*
+    <template id="s_hero_banner_options" 
+              inherit_id="website.snippet_options" 
+              name="Hero Banner Options">
+        <xpath expr="." position="inside">
+            <div data-js-option-for="HeroSnippetOptions">
+                <we-select string="Background Color" data-no-preview="true">
+                    <we-button data-select-class="" data-apply-method="selectClass">
+                        Default (Light)
+                    </we-button>
+                    <we-button data-select-class="bg-primary" data-apply-method="selectClass">
+                        Primary
+                    </we-button>
+                    <we-button data-select-class="bg-secondary" data-apply-method="selectClass">
+                        Secondary
+                    </we-button>
+                    <we-button data-select-class="bg-dark" data-apply-method="selectClass">
+                        Dark
+                    </we-button>
+                </we-select>
+            </div>
+        </xpath>
+    </template>
+*/
+
+
+// 4. Daftarkan Opsi JS Anda
+registry.category("website_snippet_options").add(
+    "HeroSnippetOptions", {
+        Component: HeroSnippetOptions,
+        // Selector ini harus cocok dengan atribut 'data-js' di HTML Anda
+        selector: ".s_hero_banner_wrapper[data-js='HeroSnippetOptions']",
+    }
+);
+Jika Anda melakukan langkah opsional ini:
+
+Pastikan Anda telah menambahkan file static/src/js/snippet_options.js ke website.assets_editor di __manifest__.py.
+
+Tambahkan data-js="HeroSnippetOptions" ke tag <section> di views/snippets/hero_snippet.xml.
+
+Tambahkan template s_hero_banner_options ke views/snippets.xml.
+
+Upgrade modul Anda.
+
+Sekarang, ketika Anda mengklik snippet Anda di editor, panel "Options" akan muncul dengan pilihan warna latar belakang.

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="template_halaman_kustom" name="Halaman Kustom Saya (Dapat Diedit)">
+            <t t-call="website.layout">
+                <!-- 
+                  PERUBAHAN:
+                  Kita hapus semua konten dinamis (tabel, pencarian, dll)
+                  dari template halaman ini.
+                  Halaman ini sekarang menjadi 'cangkang' kosong
+                  yang siap menerima snippet yang Anda drag-and-drop.
+                -->
+                <div id="wrap" class="oe_structure">
+                    
+                    <!-- 
+                      Ini adalah drop zone utama Anda.
+                      Anda bisa drag-and-drop snippet "Tabel Produk Dinamis"
+                      yang baru saja kita buat ke sini.
+                    -->
+                    <div class="oe_structure oe_empty"/>
+
+                </div> <!-- Akhir dari #wrap -->
+            </t>
+        </template>
+    </data>
+</odoo>
+
